@@ -35,9 +35,11 @@ class InvoiceController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(InvoiceRequest $request)
     {
-        //
+        $this->invoiceService->create($request->validated());
+    
+        return redirect()->route('invoices.index')->with('success', 'Nowa faktura została wystawiona.');
     }
 
     /**

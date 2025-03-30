@@ -12,6 +12,7 @@ const props = defineProps({
 const currentInvoice = ref(null);
 const editDialog = ref(false);
 const deleteDialog = ref(false);
+const newInvoiceDialog = ref(false);
 const page = usePage();
 const snackbar = ref({
     visible: false,
@@ -103,6 +104,26 @@ const saveInvoice = () => {
     });
 };
 
+const newInvoice = ref({
+    number: "",
+    buyer_nip: "",
+    seller_nip: "",
+    product_name: "",
+    amount: "",
+    product_price: ""
+});
+
+const createInvoice = () => {
+    router.post("/invoices", newInvoice.value, {
+        onSuccess: () => {
+            newInvoiceDialog.value = false;
+            snackbar.value.text = "Faktura została wystawiona!";
+            snackbar.value.visible = true;
+            newInvoice.value = { number: "", buyer_nip: "", seller_nip: "", product_name: "", amount: "", product_price: "" };
+        }
+    });
+};
+
 watchEffect(() => {
     if (page.props.flash?.success) {
         snackbar.value.text = page.props.flash.success;
@@ -125,7 +146,7 @@ watchEffect(() => {
         <div class="py-12">
             <div class="mx-auto max-w-8xl sm:px-6 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg p-6">
-
+                    <v-btn color="primary" class="ml-4" @click="newInvoiceDialog = true">Wystaw nową fakturę</v-btn>
                     <v-data-table 
                         :items="invoices.data"
                         :headers="headers">
@@ -144,6 +165,24 @@ watchEffect(() => {
         </div>
 
         <!-- modals-->
+        <v-dialog v-model="newInvoiceDialog" max-width="500px">
+            <v-card>
+                <v-card-title>Wystaw nową fakturę</v-card-title>
+                <v-card-text>
+                    <v-text-field v-model="newInvoice.number" label="Numer faktury"></v-text-field>
+                    <v-text-field v-model="newInvoice.buyer_nip" label="NIP kupującego"></v-text-field>
+                    <v-text-field v-model="newInvoice.seller_nip" label="NIP sprzedającego"></v-text-field>
+                    <v-text-field v-model="newInvoice.product_name" label="Nazwa produktu"></v-text-field>
+                    <v-text-field v-model="newInvoice.amount" label="Ilość" type="number"></v-text-field>
+                    <v-text-field v-model="newInvoice.product_price" label="Cena" type="number"></v-text-field>
+                </v-card-text>
+                <v-card-actions>
+                    <v-btn text @click="newInvoiceDialog = false">Anuluj</v-btn>
+                    <v-btn color="primary" @click="createInvoice">Zapisz</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
         <v-dialog v-model="editDialog" max-width="500px">
             <v-card>
                 <v-card-title>Edycja faktury</v-card-title>

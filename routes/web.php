@@ -13,7 +13,7 @@ Route::get('/dashboard', function () {
 Route::get('/', [InvoiceController::class, 'index'])->middleware(['auth', 'verified'])->name('invoices.index');
 
 Route::middleware('auth')->group(function () {
-    Route::post('/invoices/{invoice}', [InvoiceController::class, 'create']);
+    Route::post('/invoices', [InvoiceController::class, 'create']);
     Route::put('/invoices/{invoice}', [InvoiceController::class, 'update']);
     Route::delete('/invoices/{invoice}', [InvoiceController::class, 'destroy']);
 
