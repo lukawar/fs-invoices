@@ -2,21 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\InvoiceRequest;
 use App\Http\Resources\InvoiceCollection;
 use App\Http\Resources\InvoiceResource;
 use App\Models\Invoice;
+use App\Services\InvoiceService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class InvoiceController extends Controller
 {
     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct(public InvoiceService $invoiceService)
+    {
+        $this->invoiceService = $invoiceService;
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index()
     {
         return Inertia::render('Invoices', [
-            'invoices' => InvoiceResource::collection(Invoice::latest()->paginate(10))
+            'invoices' => InvoiceResource::collection($this->invoiceService->getInvoices()),
         ]);
     }
 
@@ -55,16 +67,22 @@ class InvoiceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(InvoiceRequest  $request, Invoice $invoice)
     {
-        //
+        $invoice->update($request->validated());
+
+        return redirect()->route('invoices.index')->with('success', 'Faktura została zaktualizowana.');
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Invoice $invoice)
     {
-        //
+        $invoice->delete();
+
+        return redirect()->route('invoices.index')->with('success', 'Faktura została usunięta.');
     }
+
 }
