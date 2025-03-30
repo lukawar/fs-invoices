@@ -97,7 +97,7 @@ const confirmDelete = () => {
 };
 
 const saveInvoice = () => {
-    router.put(`/invoices/${currentInvoice.value.id}`, currentInvoice.value, {
+    router.patch(`/invoices/${currentInvoice.value.id}`, currentInvoice.value, {
         onSuccess: () => {
             editDialog.value = false;
         }

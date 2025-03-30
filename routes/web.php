@@ -13,9 +13,10 @@ Route::get('/dashboard', function () {
 Route::get('/', [InvoiceController::class, 'index'])->middleware(['auth', 'verified'])->name('invoices.index');
 
 Route::middleware('auth')->group(function () {
-    Route::post('/invoices', [InvoiceController::class, 'create']);
-    Route::put('/invoices/{invoice}', [InvoiceController::class, 'update']);
-    Route::delete('/invoices/{invoice}', [InvoiceController::class, 'destroy']);
+    Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices.index');
+    Route::post('/invoices', [InvoiceController::class, 'create'])->name('invoices.create');
+    Route::patch('/invoices/{invoice}', [InvoiceController::class, 'update'])->name('invoices.update');
+    Route::delete('/invoices/{invoice}', [InvoiceController::class, 'destroy'])->name('invoices.destroy');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
