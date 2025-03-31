@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Invoice;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -18,6 +19,9 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
+            'password' => bcrypt('Test123'),
         ]);
+
+        Invoice::factory(100)->create();
     }
 }
