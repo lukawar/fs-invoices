@@ -1,6 +1,6 @@
 # invoices
 
-simple implementation with laravel 11, interia, vue, vuetify
+simple implementation with laravel 11, inertia, vue, vuetify
 
 ## Installation
 
